@@ -6,21 +6,24 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using MagazinCore.Models;
+using MagazinCore.Data;
 
 namespace MagazinCore.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly MagazinCoreContext _context;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(MagazinCoreContext context, ILogger<HomeController> logger)
         {
             _logger = logger;
+            _context = context;
         }
 
         public IActionResult Index()
         {
-            return View();
+            return View(_context.Produs.ToList());
         }
 
         public IActionResult Privacy()

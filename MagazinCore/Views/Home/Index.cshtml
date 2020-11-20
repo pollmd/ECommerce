@@ -1,8 +1,24 @@
-﻿@{
+﻿@model IEnumerable<Produs>
+@{
     ViewData["Title"] = "Home Page";
 }
 
 <div class="text-center">
     <h1 class="display-4">Bine ați venit!</h1>
     <p>Caută produsul dorit</p>
+</div>
+
+<div class="row">
+
+    @foreach (var item in Model)
+    {
+    <div class="col-md-2">
+        <div><b>@item.Denumire</b></div>
+        <div>@item.Descriere</div>
+        <div>Preț: @item.Cost</div>
+        <br>
+        <button class="btn btn-danger">Cumpără</button>
+    </div>
+    }
+
 </div>
