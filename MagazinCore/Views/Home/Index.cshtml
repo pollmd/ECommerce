@@ -3,22 +3,60 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Bine ați venit!</h1>
-    <p>Caută produsul dorit</p>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+<script>
+    $.getJSON('https://next.json-generator.com/api/json/get/NyHYGUlqt', function (data) {
+        document.getElementById("EUR").innerHTML = "EUR: " + data.EUR;
+        document.getElementById("USD").innerHTML = "USD: " + data.USD;
+    });
+</script>
+
+
+<style>
+    .card {
+        box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+        transition: 0.3s;
+        width: 250px;
+        border-radius: 5px;
+        margin: 10px;
+    }
+
+        .card:hover {
+            box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+        }
+
+    img {
+        border-radius: 5px 5px 0 0;
+    }
+
+    .container {
+        padding: 2px 16px;
+    }
+</style>
+
+
+
+<div class="text-right">
+    <div id="EUR"></div>
+    <div id="USD"></div>
 </div>
+
 
 <div class="row">
 
     @foreach (var item in Model)
     {
-    <div class="col-md-2">
-        <div><b>@item.Denumire</b></div>
-        <div>@item.Descriere</div>
-        <div>Preț: @item.Cost</div>
-        <br>
-        <button class="btn btn-danger">Cumpără</button>
-    </div>
+        <div class="card col-md-2">
+            <img src='@item.Imagine' alt="Avatar" style="width:100%">
+            <div class="container">
+                <h4><b>@item.Denumire</b></h4>
+                <div>@item.Descriere</div>
+                <p>
+                    Preț - @item.Cost lei <button class="btn btn-warning">Cumpără</button>
+                </p>
+            </div>
+        </div>
     }
 
 </div>
