@@ -19,5 +19,7 @@ namespace MagazinCore.Data
         public DbSet<MagazinCore.Models.Utilizatori> Utilizatori { get; set; }
 
         public DbSet<MagazinCore.Models.Cos> Cos { get; set; }
+
+        public DbSet<MagazinCore.Models.CosElemente> CosElemente { get; set; }
     }
 }
