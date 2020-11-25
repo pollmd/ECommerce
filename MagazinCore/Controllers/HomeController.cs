@@ -23,12 +23,23 @@ namespace MagazinCore.Controllers
 
         public IActionResult Index()
         {
+            ViewBag.NrProduse = _context.CosElemente.Count();
             return View(_context.Produs.ToList());
         }
 
-        public IActionResult Privacy()
+        public async Task<IActionResult> CumparaAsync(int id)
         {
-            return View();
+            var cosElemente = new CosElemente
+            {
+                Cantitate = 1,
+                ProdusId = id,
+                CosId = 1
+            };
+
+            _context.Add(cosElemente);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Index");
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
@@ -36,5 +47,7 @@ namespace MagazinCore.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+
+
     }
 }
