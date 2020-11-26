@@ -25,24 +25,6 @@ namespace MagazinCore.Controllers
             return View(await _context.Utilizatori.ToListAsync());
         }
 
-        // GET: Utilizatoris/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var utilizatori = await _context.Utilizatori
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (utilizatori == null)
-            {
-                return NotFound();
-            }
-
-            return View(utilizatori);
-        }
-
         // GET: Utilizatoris/Create
         public IActionResult Create()
         {
