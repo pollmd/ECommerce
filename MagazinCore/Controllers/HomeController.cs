@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using MagazinCore.Models;
 using MagazinCore.Data;
+using Microsoft.AspNetCore.Http;
 
 namespace MagazinCore.Controllers
 {
@@ -24,6 +25,7 @@ namespace MagazinCore.Controllers
         public IActionResult Index()
         {
             ViewBag.NrProduse = _context.CosElemente.Count();
+            ViewBag.LoggedUser = Request.Cookies["LoggedUser"];
             return View(_context.Produs.ToList());
         }
 
@@ -48,6 +50,35 @@ namespace MagazinCore.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
+        public IActionResult Login()
+        {
+            return View();
+        }
 
+        public IActionResult Autorizare(Utilizatori user)
+        {
+            var existingUser = _context.Utilizatori.FirstOrDefault(x=>x.Nume == user.Nume && x.Parola == user.Parola);
+
+            if (existingUser != null)
+            {
+                CookieOptions option = new CookieOptions();
+                option.Expires = DateTime.Now.AddDays(30);
+
+                Response.Cookies.Append("LoggedUser", user.Nume, option);
+
+                return RedirectToAction("Index", "Home");
+            }
+
+            ViewBag.EroareDeConectare = "Utilizator sau Parolă greșită!";
+            return View("Login");
+            
+        }
+
+        public IActionResult Logout(Utilizatori user)
+        {
+            Response.Cookies.Delete("LoggedUser");
+
+            return RedirectToAction("Index", "Home");
+        }
     }
 }

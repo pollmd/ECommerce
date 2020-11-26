@@ -4,7 +4,7 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Conținutul coșului</h1>
+<h1>Ordin de plată</h1>
 
 <table class="table">
     <thead>
@@ -15,7 +15,6 @@
             <th>
                 Cantitate
             </th>
-            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -27,13 +26,13 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Cantitate)
             </td>
-            <td>
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
         </tr>
 }
     </tbody>
 </table>
 
-<a href="/CosElementes/OrdinDeplata" class="btn btn-light">Ordin de plată</a>
-<a href="/CosElementes/Plateste" class="btn btn-info">Achită</a>
+<br>
+<b>Total : </b> @ViewBag.SumaTotala lei
+<hr>
+
+<a href="/CosElementes/Achita" class="btn btn-info">Achită</a>

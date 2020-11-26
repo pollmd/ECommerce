@@ -25,24 +25,6 @@ namespace MagazinCore.Controllers
             return View(await _context.Produs.ToListAsync());
         }
 
-        // GET: Produs/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var produs = await _context.Produs
-                .FirstOrDefaultAsync(m => m.id == id);
-            if (produs == null)
-            {
-                return NotFound();
-            }
-
-            return View(produs);
-        }
-
         // GET: Produs/Create
         public IActionResult Create()
         {

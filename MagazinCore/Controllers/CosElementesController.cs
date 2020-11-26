@@ -23,8 +23,37 @@ namespace MagazinCore.Controllers
         public async Task<IActionResult> Index()
         {
             ViewBag.NrProduse = _context.CosElemente.Count();
-            var magazinCoreContext = _context.CosElemente.Include(c => c.Cos).Include(c => c.Produs);
-            return View(await magazinCoreContext.ToListAsync());
+            var produse = _context.CosElemente.Include(c => c.Cos).Include(c => c.Produs);
+
+            return View(await produse.ToListAsync());
+        }
+
+        // GET: CosElementes
+        public IActionResult OrdinDeplata()
+        {
+            ViewBag.NrProduse = _context.CosElemente.Count();
+            var produse = _context.CosElemente.Include(c => c.Cos).Include(c => c.Produs);
+
+            ViewBag.SumaTotala = produse.Sum(x => x.Produs.Cost);
+
+            var produseGrupate = new List<CosElemente>();
+
+            foreach (var line in produse.GroupBy(info => info.Produs.id)
+                        .Select(group => new
+                        {
+                            Metric = group.Key,
+                            Count = group.Count()
+                        })
+                        .OrderBy(x => x.Metric))
+            {
+                produseGrupate.Add(new CosElemente
+                {
+                    Produs = _context.Produs.Find(line.Metric),
+                    Cantitate = line.Count
+                });
+            }
+
+            return View(produseGrupate);
         }
 
         // GET: CosElementes/Delete/5

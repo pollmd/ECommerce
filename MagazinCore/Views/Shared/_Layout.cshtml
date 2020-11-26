@@ -17,9 +17,19 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
-                    <a href="/Home/Login/" style="color:#989898; margin-left:10px">
-                        Log In
-                    </a>
+                    @if (ViewBag.LoggedUser != null)
+                    {
+                        <a href="/Home/Logout/" style="color:#989898; margin-left:10px">
+                            Log out
+                        </a>
+                        <span style="margin-right:10px; margin-left:10px">  @ViewBag.LoggedUser </span>
+                    }
+                    else
+                    {
+                        <a href="/Home/Login/" style="color:#989898; margin-left:10px">
+                            Log In
+                        </a>
+                    }
                     <a href="/CosElementes/Index/">
                         <div class="navbar-nav">
                             <img src="~/img/cart.png" style="width:45px" />

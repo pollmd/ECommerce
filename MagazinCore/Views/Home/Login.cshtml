@@ -1,0 +1,31 @@
+﻿@model MagazinCore.Models.Utilizatori
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h4>Autorizare</h4>
+<hr />
+<div style="color:red">@ViewBag.EroareDeConectare</div>
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Autorizare">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Nume" class="control-label"></label>
+                <input asp-for="Nume" class="form-control" />
+                <span asp-validation-for="Nume" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Parola" class="control-label"></label>
+                <input asp-for="Parola" class="form-control" />
+                <span asp-validation-for="Parola" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Login" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+
