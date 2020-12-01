@@ -20,9 +20,10 @@ namespace Magazin.Controllers
             return View();
         }
 
-        public ActionResult Contact()
+        public ActionResult Contact(FormCollection form)
         {
-            ViewBag.Message = "Your contact page.";
+            var formElements = form["tara"];
+            ViewBag.Message = formElements;
 
             return View();
         }

@@ -1,7 +1,27 @@
 ﻿@{
     ViewBag.Title = "About";
 }
-<h2>@ViewBag.Title.</h2>
-<h3>@ViewBag.Message</h3>
 
-<p>Use this area to provide additional information.</p>
+
+<script>
+    function functieTrimite()
+    {
+       document.getElementById("trimiteTara").submit();
+    }
+</script>
+
+<h2>Alege o țară</h2>
+
+<form id="trimiteTara" action="/Home/Contact" method="POST">
+    <select onchange="functieTrimite()" id="tara" name="tara">
+        <option value=""></option>
+        <option value="Moldova">Moldova</option>
+        <option value="Franta">Franta</option>
+        <option value="Marea Britanie">Marea Britanie</option>
+    </select>
+
+    @*<input type="text" id="taratext" name="taratext" />*@
+
+    @*<button type="submit">Send</button>*@
+</form>
+
