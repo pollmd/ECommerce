@@ -31,11 +31,25 @@ namespace MagazinCore.Controllers
 
         public async Task<IActionResult> CumparaAsync(int id)
         {
+
+            Cos cos = _context.Cos.FirstOrDefault(e => e.Status == "Draft");
+
+            if (cos == null)
+            {
+                cos = new Cos();
+                cos.Status = "Draft";
+                cos.UserId = 1;
+                cos.Creare = DateTime.Now;
+
+                _context.Add(cos);
+                await _context.SaveChangesAsync();
+            }
+
             var cosElemente = new CosElemente
             {
                 Cantitate = 1,
                 ProdusId = id,
-                CosId = 1
+                CosId = cos.Id
             };
 
             _context.Add(cosElemente);
