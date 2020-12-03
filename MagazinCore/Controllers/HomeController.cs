@@ -24,21 +24,44 @@ namespace MagazinCore.Controllers
 
         public IActionResult Index()
         {
-            ViewBag.NrProduse = _context.CosElemente.Count();
             ViewBag.LoggedUser = Request.Cookies["LoggedUser"];
+            var user = _context.Utilizatori.FirstOrDefault(x => x.Nume == Request.Cookies["LoggedUser"]);
+
+            if (user == null)
+            {
+                ViewBag.NrProduse = 0;
+            }
+            else 
+            {
+                var cos = _context.Cos.FirstOrDefault(x=>x.Status=="Draft" && x.UserId == user.Id);
+                if (cos != null)
+                    ViewBag.NrProduse = _context.CosElemente.Where(x => x.CosId == cos.Id).Count();
+                else
+                    ViewBag.NrProduse = 0;
+            }
+            
             return View(_context.Produs.ToList());
         }
 
         public async Task<IActionResult> CumparaAsync(int id)
         {
+            var user = _context.Utilizatori.FirstOrDefault(x => x.Nume == Request.Cookies["LoggedUser"]);
+            var cos = new Cos();
 
-            Cos cos = _context.Cos.FirstOrDefault(e => e.Status == "Draft");
+            if (user == null)
+            {
+                return RedirectToAction("Login", "Home");
+            }
+            else
+            {
+                cos = _context.Cos.FirstOrDefault(e => e.Status == "Draft" && e.UserId == user.Id);
+            }
 
             if (cos == null)
             {
                 cos = new Cos();
                 cos.Status = "Draft";
-                cos.UserId = 1;
+                cos.UserId = user.Id;
                 cos.Creare = DateTime.Now;
 
                 _context.Add(cos);
