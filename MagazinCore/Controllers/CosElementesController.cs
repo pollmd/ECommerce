@@ -22,8 +22,29 @@ namespace MagazinCore.Controllers
         // GET: CosElementes
         public async Task<IActionResult> Index()
         {
-            ViewBag.NrProduse = _context.CosElemente.Count();
-            var produse = _context.CosElemente.Include(c => c.Cos).Include(c => c.Produs);
+
+
+            ViewBag.LoggedUser = Request.Cookies["LoggedUser"];
+            var user = _context.Utilizatori.FirstOrDefault(x => x.Nume == Request.Cookies["LoggedUser"]);
+            var produse = _context.CosElemente.Where(x => x.CosId == -1);
+
+            if (user == null)
+            {
+                ViewBag.NrProduse = 0;
+            }
+            else
+            {
+                var cos = _context.Cos.FirstOrDefault(x => x.Status == "Draft" && x.UserId == user.Id);
+                if (cos != null)
+                {
+                    ViewBag.NrProduse = _context.CosElemente.Where(x => x.CosId == cos.Id).Count();
+                    produse = _context.CosElemente.Include(c => c.Cos).Include(c => c.Produs).Where(x=>x.CosId==cos.Id);
+                }
+                else
+                    ViewBag.NrProduse = 0;
+            }
+
+            
 
             return View(await produse.ToListAsync());
         }
@@ -90,6 +111,29 @@ namespace MagazinCore.Controllers
         private bool CosElementeExists(int id)
         {
             return _context.CosElemente.Any(e => e.Id == id);
+        }
+
+        public async Task<IActionResult> AchitaAsync()
+        {
+
+            var loggedUser = Request.Cookies["LoggedUser"];
+            var user = _context.Utilizatori.FirstOrDefault(x => x.Nume == loggedUser);
+
+            if (user != null)
+            {
+                ViewBag.NrProduse = 0;
+
+                var cos = _context.Cos.FirstOrDefault(x => x.Status == "Draft" && x.UserId == user.Id);
+                if (cos != null)
+                {
+                    cos.Status = "Cumparat";
+                    _context.Cos.Update(cos);
+                    await _context.SaveChangesAsync();
+                }
+
+            }
+
+            return RedirectToAction("Index", "Home");
         }
     }
 }
