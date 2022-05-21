@@ -3,6 +3,11 @@
 @{
     ViewData["Title"] = "Edit";
 }
+@*<script src="~/js/croppie.min.js" asp-append-version="true"></script>*@
+<script src="~/lib/jquery/dist/jquery.js" asp-append-version="true"></script>
+<link href="~/css/croppie.css"/>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.5/croppie.min.js" integrity="sha512-Gs+PsXsGkmr+15rqObPJbenQ2wB3qYvTHuJO6YJzPe/dTLvhy0fmae2BcnaozxDo5iaF8emzmCZWbQ1XXiX2Ig==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
 <h1>Edit</h1>
 
@@ -54,10 +59,27 @@
                 <span asp-validation-for="Reducere" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Imagine" class="control-label"></label>
-                <input asp-for="Imagine" class="form-control" />
-                <span asp-validation-for="Imagine" class="text-danger"></span>
+                <label asp-for="StartReducere" class="control-label"></label>
+                <input asp-for="StartReducere" class="form-control" />
+                <span asp-validation-for="StartReducere" class="text-danger"></span>
             </div>
+            <div class="form-group">
+                <label asp-for="EndReducere" class="control-label"></label>
+                <input asp-for="EndReducere" class="form-control" />
+                <span asp-validation-for="EndReducere" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Imagine" class="control-label"></label>
+                <input id="upload" type="file" class="form-control" accept="image/*"/>
+                <span asp-validation-for="Imagine" class="text-danger"></span>
+
+                @*<span class="btn btn-grey btn-file">
+                    <input id="upload" name="file_data" type="file" accept="image/*" />
+                </span>*@
+
+                <div id="upload-preview" style="height:fit-content" class="mt30 mb35"></div>
+            </div>
+
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
@@ -68,6 +90,68 @@
 <div>
     <a asp-action="Index">Back to List</a>
 </div>
+
+<script>
+    var uploadCrop;
+    function readFile(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                uploadCrop.croppie("bind", { url: e.target.result });
+                $("#upload-preview").addClass("ready");
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    var w = $(window).width(), h = $(window).height();
+
+    console.log('window width: ' + w);
+    console.log('window height: ' + h);
+    if (w < 400) var wCalc = 25;
+    else if (w < 350) var wCalc = 50;
+    else if (w < 300) var wCalc = 75;
+    else var wCalc = 0;
+
+    var uploadCrop = $("#upload-preview").croppie({
+        setZoom: 1.0,
+        enableOrientation: true,
+        quality: 1,
+        viewport: {
+            width: 250 - wCalc,
+            height: 250 - wCalc,
+            //type: "rectagle"
+        },
+        boundary: {
+            width: 320 - wCalc,
+            height: 320 - wCalc
+        },
+        exif: true
+    });
+    $("#upload").on("change", function () {
+        readFile(this);
+    });
+    function output(node) {
+        var existing = $("#result .croppie-result");
+        if (existing.length > 0) {
+            existing[0].parentNode.replaceChild(node, existing[0]);
+        } else {
+            $("#result")[0].appendChild(node);
+        }
+    }
+    function popupResult(result) {
+        var html;
+        if (result.html) {
+            html = result.html;
+        }
+
+        console.log(result.src);
+
+        if (result.src) {
+            $("#result").html("<img id=\"canvas\" src=\"" + result.src + "\" />");
+        }
+    }
+</script>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

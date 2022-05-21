@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MagazinCore.Data;
 using MagazinCore.Models;
+using MagazinCore.Models.ViewModels;
 
 namespace MagazinCore.Controllers
 {
@@ -22,7 +23,30 @@ namespace MagazinCore.Controllers
         // GET: Produs
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Produs.ToListAsync());
+            var list = await _context.Produs.ToListAsync();
+
+            var pList = new List<ProdusPlus>();
+
+            foreach(var p in list)
+            {
+                pList.Add(new ProdusPlus 
+                {
+                    id =p.id,
+                    Denumire=p.Denumire,
+                    Descriere=p.Descriere,
+                    Cost= p.Cost,
+                    Tva=p.Tva,
+                    Acciz=p.Acciz,
+                    Marime=p.Marime,
+                    Culoare=p.Culoare,
+                    Reducere=p.Reducere,
+                    StartReducere=p.StartReducere,
+                    EndReducere=p.EndReducere,
+                    Imagine=p.Imagine
+                });
+            }
+
+            return View(pList);
         }
 
         // GET: Produs/Create

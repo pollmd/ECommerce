@@ -1,4 +1,4 @@
-﻿@model IEnumerable<MagazinCore.Models.Produs>
+﻿@model IEnumerable<MagazinCore.Models.ViewModels.ProdusPlus>
 
 @{
     ViewData["Title"] = "Index";
@@ -39,6 +39,9 @@
             <th>
                 @Html.DisplayNameFor(model => model.Imagine)
             </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Pret)
+            </th>
             <th></th>
         </tr>
     </thead>
@@ -68,6 +71,9 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Reducere) %
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Pret)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Imagine)
