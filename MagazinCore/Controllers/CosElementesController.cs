@@ -22,8 +22,6 @@ namespace MagazinCore.Controllers
         // GET: CosElementes
         public async Task<IActionResult> Index()
         {
-
-
             ViewBag.LoggedUser = Request.Cookies["LoggedUser"];
             var user = _context.Utilizatori.FirstOrDefault(x => x.Nume == Request.Cookies["LoggedUser"]);
             var produse = _context.CosElemente.Where(x => x.CosId == -1);
@@ -124,13 +122,21 @@ namespace MagazinCore.Controllers
                 ViewBag.NrProduse = 0;
 
                 var cos = _context.Cos.FirstOrDefault(x => x.Status == "Draft" && x.UserId == user.Id);
+
                 if (cos != null)
                 {
                     cos.Status = "Cumparat";
                     _context.Cos.Update(cos);
+
+                    var elemente = _context.CosElemente.Include(p=>p.Produs).Where(x => x.CosId == cos.Id);
+                    foreach(var e in elemente)
+                    {
+                        e.Produs.Cantitate = e.Produs.Cantitate - 1;
+                        _context.Produs.Update(e.Produs);
+                    }
+
                     await _context.SaveChangesAsync();
                 }
-
             }
 
             return RedirectToAction("Index", "Home");

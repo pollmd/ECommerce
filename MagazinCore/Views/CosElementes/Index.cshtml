@@ -25,7 +25,7 @@
                 <b>@item.Produs.Denumire </b> - @item.Produs.Descriere
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Cantitate)
+                @Html.DisplayFor(modelItem => item.Produs.Cantitate)
             </td>
             <td>
                 <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>

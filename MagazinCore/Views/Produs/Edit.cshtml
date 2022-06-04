@@ -69,16 +69,17 @@
                 <span asp-validation-for="EndReducere" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label asp-for="Cantitate" class="control-label"></label>
+                <input asp-for="Cantitate" class="form-control" />
+                <span asp-validation-for="Cantitate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <label asp-for="Imagine" class="control-label"></label>
                 <input asp-for="Imagine" class="form-control" />
                 <input id="upload" type="file" class="form-control" accept="image/*" />
                 <span asp-validation-for="Imagine" class="text-danger"></span>
 
-                @*<span class="btn btn-grey btn-file">
-            <input id="upload" name="file_data" type="file" accept="image/*" />
-        </span>*@
-
-                <button type="button" onclick="zzz()">test</button>
+                <button type="button" onclick="uploadImg()">Incarca imagine</button>
 
                 <div id="upload-preview" style="height:fit-content" class="mt30 mb35"></div>
             </div>
@@ -155,7 +156,7 @@
         }
     }
 
-    function zzz() {
+    function uploadImg() {
         var imgBytes = null;
         var img_width = $('.cr-image').attr('width');
 

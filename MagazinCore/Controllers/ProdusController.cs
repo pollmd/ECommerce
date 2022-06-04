@@ -42,7 +42,8 @@ namespace MagazinCore.Controllers
                     Reducere=p.Reducere,
                     StartReducere=p.StartReducere,
                     EndReducere=p.EndReducere,
-                    Imagine=p.Imagine
+                    Imagine=p.Imagine,
+                    Cantitate=p.Cantitate
                 });
             }
 

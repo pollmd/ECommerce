@@ -21,5 +21,6 @@ namespace MagazinCore.Models
         public DateTime StartReducere { get; set; }
         public DateTime EndReducere { get; set; }
         public string Imagine { get; set; }
+        public int Cantitate { get; set; }
     }
 }
