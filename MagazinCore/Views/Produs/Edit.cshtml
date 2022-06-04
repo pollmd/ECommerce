@@ -70,12 +70,15 @@
             </div>
             <div class="form-group">
                 <label asp-for="Imagine" class="control-label"></label>
-                <input id="upload" type="file" class="form-control" accept="image/*"/>
+                <input asp-for="Imagine" class="form-control" />
+                <input id="upload" type="file" class="form-control" accept="image/*" />
                 <span asp-validation-for="Imagine" class="text-danger"></span>
 
                 @*<span class="btn btn-grey btn-file">
-                    <input id="upload" name="file_data" type="file" accept="image/*" />
-                </span>*@
+            <input id="upload" name="file_data" type="file" accept="image/*" />
+        </span>*@
+
+                <button type="button" onclick="zzz()">test</button>
 
                 <div id="upload-preview" style="height:fit-content" class="mt30 mb35"></div>
             </div>
@@ -118,13 +121,13 @@
         enableOrientation: true,
         quality: 1,
         viewport: {
-            width: 250 - wCalc,
-            height: 250 - wCalc,
+            width: 175 - wCalc,
+            height: 175 - wCalc,
             //type: "rectagle"
         },
         boundary: {
-            width: 320 - wCalc,
-            height: 320 - wCalc
+            width: 180 - wCalc,
+            height: 180 - wCalc
         },
         exif: true
     });
@@ -149,6 +152,21 @@
 
         if (result.src) {
             $("#result").html("<img id=\"canvas\" src=\"" + result.src + "\" />");
+        }
+    }
+
+    function zzz() {
+        var imgBytes = null;
+        var img_width = $('.cr-image').attr('width');
+
+        if (img_width) {
+            // Image Base64
+            uploadCrop.croppie("result", { type: "canvas", size: { width: 150, height: 150 } }).then(function (resp) {
+                popupResult({ src: resp });
+                //params.append('img', resp);
+                document.getElementById('Imagine').value = resp;
+               // console.log(resp);
+            });
         }
     }
 </script>
