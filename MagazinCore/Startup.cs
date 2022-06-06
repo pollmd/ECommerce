@@ -27,8 +27,11 @@ namespace MagazinCore
         {
             services.AddControllersWithViews();
 
+            //services.AddDbContext<MagazinCoreContext>(options =>
+            //        options.UseSqlServer(Configuration.GetConnectionString("MagazinCoreContext")));
+
             services.AddDbContext<MagazinCoreContext>(options =>
-                    options.UseSqlServer(Configuration.GetConnectionString("MagazinCoreContext")));
+                    options.UseNpgsql(Configuration.GetConnectionString("MagazinCoreContext")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
