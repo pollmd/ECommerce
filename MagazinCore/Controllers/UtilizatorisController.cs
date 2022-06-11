@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using MagazinCore.Data;
+using MagazinCore.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using MagazinCore.Data;
-using MagazinCore.Models;
+using System.Security.Cryptography;
 
 namespace MagazinCore.Controllers
 {
@@ -36,15 +34,21 @@ namespace MagazinCore.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Nume,Parola,Creare,Email,Telefon")] Utilizatori utilizatori)
+        public async Task<IActionResult> Create(Utilizatori utilizator)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(utilizatori);
+                var md5 = MD5.Create();
+                byte[] inputBytes = System.Text.Encoding.ASCII.GetBytes(utilizator.Parola);
+                byte[] hashBytes = md5.ComputeHash(inputBytes);
+
+                utilizator.Parola = hashBytes.ToString();
+
+                _context.Add(utilizator);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(utilizatori);
+            return View(utilizator);
         }
 
         // GET: Utilizatoris/Edit/5

@@ -18,14 +18,58 @@
             </div>
             <div class="form-group">
                 <label asp-for="Parola" class="control-label"></label>
-                <input asp-for="Parola" class="form-control" />
+                <input class="form-control" type="password" name="Parola" id="Parola"/>
                 <span asp-validation-for="Parola" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Login" class="btn btn-primary" />
+                <button type="button" class="btn btn-secondary" onclick="displayCreation()">Crează user</button>
+            </div>
+        </form>
+    </div>
+    <div class="col-md-4" id="createForm" style="display:none">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Nume" class="control-label"></label>
+                <input asp-for="Nume" class="form-control" />
+                <span asp-validation-for="Nume" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Parola" class="control-label"></label>
+                <input class="form-control confirm-psw" name="Parola" id="Parola" type="password"/>
+                <span asp-validation-for="Parola" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Confirmă parolă</label>
+                <input class="form-control confirm-psw" type="password" id="ConfirmaParola" onchange="confirmPsw()"/>
+                <span asp-validation-for="Parola" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Role" class="control-label"></label>
+                <select asp-for="Role" class="form-control">
+                    <option value="2">Buyer</option>
+                    <option value="3">Seller</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
+
+<script>
+    function displayCreation() {
+        document.getElementById("createForm").style.display = "block";
+    }
+
+    function confirmPsw() {
+        var psws = document.getElementsByClassName("confirm-psw");
+
+        if (psws[0].value == psws[1].value)
+            console.log("parola confirmata");
+    }
+</script>
 
 

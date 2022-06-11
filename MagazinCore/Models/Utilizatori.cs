@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using MagazinCore.Common.Enums;
+using System;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace MagazinCore.Models
 {
@@ -15,5 +13,6 @@ namespace MagazinCore.Models
         public DateTime Creare { get; set; }
         public string Email { get; set; }
         public string Telefon { get; set; }
+        public UserRole Role { get; set; }
     }
 }

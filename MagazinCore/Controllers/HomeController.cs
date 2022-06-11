@@ -8,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using MagazinCore.Models;
 using MagazinCore.Data;
 using Microsoft.AspNetCore.Http;
+using System.Security.Cryptography;
 
 namespace MagazinCore.Controllers
 {
@@ -94,6 +95,12 @@ namespace MagazinCore.Controllers
 
         public IActionResult Autorizare(Utilizatori user)
         {
+            var md5 = MD5.Create();
+            byte[] inputBytes = System.Text.Encoding.ASCII.GetBytes(user.Parola);
+            byte[] hashBytes = md5.ComputeHash(inputBytes);
+
+            user.Parola = Convert.ToBase64String(hashBytes);
+
             var existingUser = _context.Utilizatori.FirstOrDefault(x=>x.Nume == user.Nume && x.Parola == user.Parola);
 
             if (existingUser != null)
@@ -116,6 +123,25 @@ namespace MagazinCore.Controllers
             Response.Cookies.Delete("LoggedUser");
 
             return RedirectToAction("Index", "Home");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(Utilizatori utilizator)
+        {
+            if (ModelState.IsValid)
+            {
+                var md5 = MD5.Create();
+                byte[] inputBytes = System.Text.Encoding.ASCII.GetBytes(utilizator.Parola);
+                byte[] hashBytes = md5.ComputeHash(inputBytes);
+
+                utilizator.Parola = Convert.ToBase64String(hashBytes);
+
+                _context.Add(utilizator);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            return View(utilizator);
         }
     }
 }
