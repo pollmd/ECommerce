@@ -1,4 +1,4 @@
-﻿@model MagazinCore.Models.Utilizatori
+﻿@model MagazinCore.Models.ViewModels.UserConfirm
 
 @{
     ViewData["Title"] = "Create";
@@ -37,13 +37,13 @@
             </div>
             <div class="form-group">
                 <label asp-for="Parola" class="control-label"></label>
-                <input class="form-control confirm-psw" name="Parola" id="Parola" type="password"/>
+                <input class="form-control" name="Parola" id="Parola" type="password"/>
                 <span asp-validation-for="Parola" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label class="control-label">Confirmă parolă</label>
-                <input class="form-control confirm-psw" type="password" id="ConfirmaParola" onchange="confirmPsw()"/>
-                <span asp-validation-for="Parola" class="text-danger"></span>
+                <input class="form-control" asp-for="ConfirmPassword" type="password" />
+                <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Role" class="control-label"></label>
@@ -62,13 +62,6 @@
 <script>
     function displayCreation() {
         document.getElementById("createForm").style.display = "block";
-    }
-
-    function confirmPsw() {
-        var psws = document.getElementsByClassName("confirm-psw");
-
-        if (psws[0].value == psws[1].value)
-            console.log("parola confirmata");
     }
 </script>
 

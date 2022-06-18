@@ -8,7 +8,11 @@ namespace MagazinCore.Models
     {
         [Key]
         public int Id { get; set; }
+
+        [Required(ErrorMessage = "Numele este obligatoriu!")]
         public string Nume { get; set; }
+
+        [Required(ErrorMessage = "Parola este obligatorie!")]
         public string Parola { get; set; }
         public DateTime Creare { get; set; }
         public string Email { get; set; }
