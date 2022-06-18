@@ -12,7 +12,7 @@ namespace MagazinCore.Models.ViewModels
             get { return CalculPret(); }
         }
 
-        private float CalculPret()
+        public float CalculPret()
         {
             var result = Cost + Tva * Cost / 100 + Acciz * Cost / 100;
 
