@@ -25,8 +25,13 @@ namespace IntegrationTests
         [Fact]
         public void CheckIfCreatePageExists()
         {
+            string[] t = { };
+            MagazinCore.Program.CreateHostBuilder(t).Build().StartAsync();
+
             var driver = new ChromeDriver();
-            driver.Navigate().GoToUrl("https://pyapp4.herokuapp.com/");
+            //driver.Navigate().GoToUrl("https://pyapp4.herokuapp.com/");
+
+            driver.Navigate().GoToUrl("https://localhost:5001/");
         }
     }
 }
