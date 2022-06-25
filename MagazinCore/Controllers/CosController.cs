@@ -145,6 +145,22 @@ namespace MagazinCore.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        public async Task<IActionResult> OrderWorkflow(int id)
+        {
+            var cos = _context.Cos.FirstOrDefault(x => x.Id == id);
+
+            if(cos.Status == "Cumparat")
+            {
+                ViewBag.StepperDraft = "completed";
+                ViewBag.StepperPayed = "active";
+
+                //ViewBag.StepperDelivered
+                //ViewBag.StepperClosed
+            }
+
+            return View(cos);
+        }
+
         private bool CosExists(int id)
         {
             return _context.Cos.Any(e => e.Id == id);

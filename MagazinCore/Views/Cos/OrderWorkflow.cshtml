@@ -1,0 +1,131 @@
+﻿@model MagazinCore.Models.Cos
+
+    @{
+        ViewData["Title"] = "Order status";
+    }
+
+    <h1>Order status</h1>
+
+    <div class="stepper-wrapper">
+      <div class="stepper-item @ViewBag.StepperDraft">
+        <div class="step-counter">1</div>
+        <div class="step-name">Draft</div>
+      </div>
+      <div class="stepper-item @ViewBag.StepperPayed">
+        <div class="step-counter">2</div>
+        <div class="step-name">Payed</div>
+      </div>
+      <div class="stepper-item @ViewBag.StepperDelivered">
+        <div class="step-counter">3</div>
+        <div class="step-name">Delivered</div>
+      </div>
+      <div class="stepper-item @ViewBag.StepperClosed">
+        <div class="step-counter">4</div>
+        <div class="step-name">Closed</div>
+      </div>
+    </div>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Id)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Status)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Creare)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+                <tr>
+                    <td>
+                        @Html.DisplayFor(model => model.Id)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => model.Status)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => model.Creare)
+                    </td>
+                </tr>
+        </tbody>
+    </table>
+
+<style>
+    .stepper-wrapper {
+  font-family: Arial;
+  margin-top: 50px;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+.stepper-item {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+}
+
+.stepper-item::before {
+  position: absolute;
+  content: "";
+  border-bottom: 2px solid #ccc;
+  width: 100%;
+  top: 20px;
+  left: -50%;
+  z-index: 2;
+}
+
+.stepper-item::after {
+  position: absolute;
+  content: "";
+  border-bottom: 2px solid #ccc;
+  width: 100%;
+  top: 20px;
+  left: 50%;
+  z-index: 2;
+}
+
+.stepper-item .step-counter {
+  position: relative;
+  z-index: 5;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #ccc;
+  margin-bottom: 6px;
+}
+
+.stepper-item.active {
+  font-weight: bold;
+}
+
+.stepper-item.completed .step-counter {
+  background-color: #4bb543;
+}
+
+.stepper-item.completed::after {
+  position: absolute;
+  content: "";
+  border-bottom: 2px solid #4bb543;
+  width: 100%;
+  top: 20px;
+  left: 50%;
+  z-index: 3;
+}
+
+.stepper-item:first-child::before {
+  content: none;
+}
+.stepper-item:last-child::after {
+  content: none;
+}
+</style>
