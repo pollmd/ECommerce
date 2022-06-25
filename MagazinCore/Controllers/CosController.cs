@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
+﻿using MagazinCore.Common.Enums;
 using MagazinCore.Data;
 using MagazinCore.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace MagazinCore.Controllers
 {
@@ -149,13 +147,30 @@ namespace MagazinCore.Controllers
         {
             var cos = _context.Cos.FirstOrDefault(x => x.Id == id);
 
-            if(cos.Status == "Cumparat")
+            if (cos.Status == OrderStatus.Draft)
+            {
+                ViewBag.StepperDraft = "active";
+            }
+
+            if (cos.Status == OrderStatus.Payed)
             {
                 ViewBag.StepperDraft = "completed";
                 ViewBag.StepperPayed = "active";
+            }
 
-                //ViewBag.StepperDelivered
-                //ViewBag.StepperClosed
+            if (cos.Status == OrderStatus.Delivered)
+            {
+                ViewBag.StepperDraft = "completed";
+                ViewBag.StepperPayed = "completed";
+                ViewBag.StepperDelivered = "active";
+            }
+
+            if (cos.Status == OrderStatus.Closed)
+            {
+                ViewBag.StepperDraft = "completed";
+                ViewBag.StepperPayed = "completed";
+                ViewBag.StepperDelivered = "completed";
+                ViewBag.StepperClosed = "active";
             }
 
             return View(cos);

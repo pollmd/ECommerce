@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using MagazinCore.Common.Enums;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace MagazinCore.Models
 {
@@ -12,7 +10,7 @@ namespace MagazinCore.Models
         [Key]
         public int Id { get; set; }
         public DateTime Creare { get; set; }
-        public string Status { get; set; }
+        public OrderStatus Status { get; set; }
 
         [ForeignKey("Utilizatori")]
         public int UserId { get; set; }

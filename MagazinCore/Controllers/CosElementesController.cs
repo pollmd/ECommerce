@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MagazinCore.Data;
 using MagazinCore.Models;
+using MagazinCore.Common.Enums;
 
 namespace MagazinCore.Controllers
 {
@@ -32,7 +33,7 @@ namespace MagazinCore.Controllers
             }
             else
             {
-                var cos = _context.Cos.FirstOrDefault(x => x.Status == "Draft" && x.UserId == user.Id);
+                var cos = _context.Cos.FirstOrDefault(x => x.Status == OrderStatus.Draft && x.UserId == user.Id);
                 if (cos != null)
                 {
                     ViewBag.NrProduse = _context.CosElemente.Where(x => x.CosId == cos.Id).Count();
@@ -121,11 +122,11 @@ namespace MagazinCore.Controllers
             {
                 ViewBag.NrProduse = 0;
 
-                var cos = _context.Cos.FirstOrDefault(x => x.Status == "Draft" && x.UserId == user.Id);
+                var cos = _context.Cos.FirstOrDefault(x => x.Status == OrderStatus.Draft && x.UserId == user.Id);
 
                 if (cos != null)
                 {
-                    cos.Status = "Cumparat";
+                    cos.Status = OrderStatus.Payed;
                     _context.Cos.Update(cos);
 
                     var elemente = _context.CosElemente.Include(p=>p.Produs).Where(x => x.CosId == cos.Id);

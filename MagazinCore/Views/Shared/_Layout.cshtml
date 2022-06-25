@@ -27,8 +27,11 @@
                                 @ViewBag.LoggedUser
                             </button>
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <a class="dropdown-item" href="/Produs">Produse</a>
-                                <a class="dropdown-item" href="/Utilizatoris">Utilizatori</a>
+                                @if (ViewBag.UserRole == "Admin")
+                                {
+                                    <a class="dropdown-item" href="/Produs">Produse</a>
+                                    <a class="dropdown-item" href="/Utilizatoris">Utilizatori</a>
+                                }
                                 <a class="dropdown-item" href="/Cos">Ordin de plată</a>
                             </div>
                         </div>

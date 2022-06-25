@@ -72,7 +72,7 @@ namespace MagazinCore.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Nume,Parola,Creare,Email,Telefon")] Utilizatori utilizatori)
+        public async Task<IActionResult> Edit(int id, Utilizatori utilizatori)
         {
             if (id != utilizatori.Id)
             {

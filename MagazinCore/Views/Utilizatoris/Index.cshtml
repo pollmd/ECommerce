@@ -16,9 +16,6 @@
                 @Html.DisplayNameFor(model => model.Nume)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Parola)
-            </th>
-            <th>
                 @Html.DisplayNameFor(model => model.Creare)
             </th>
             <th>
@@ -26,6 +23,9 @@
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Telefon)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Role)
             </th>
             <th></th>
         </tr>
@@ -37,9 +37,6 @@
                 @Html.DisplayFor(modelItem => item.Nume)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Parola)
-            </td>
-            <td>
                 @Html.DisplayFor(modelItem => item.Creare)
             </td>
             <td>
@@ -47,6 +44,9 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Telefon)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Role)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |

@@ -9,6 +9,7 @@ using MagazinCore.Models;
 using MagazinCore.Data;
 using Microsoft.AspNetCore.Http;
 using System.Security.Cryptography;
+using MagazinCore.Common.Enums;
 
 namespace MagazinCore.Controllers
 {
@@ -26,6 +27,7 @@ namespace MagazinCore.Controllers
         public IActionResult Index()
         {
             ViewBag.LoggedUser = Request.Cookies["LoggedUser"];
+            ViewBag.UserRole = Request.Cookies["UserRole"];
             var user = _context.Utilizatori.FirstOrDefault(x => x.Nume == Request.Cookies["LoggedUser"]);
 
             if (user == null)
@@ -34,7 +36,7 @@ namespace MagazinCore.Controllers
             }
             else 
             {
-                var cos = _context.Cos.FirstOrDefault(x=>x.Status=="Draft" && x.UserId == user.Id);
+                var cos = _context.Cos.FirstOrDefault(x=>x.Status == OrderStatus.Draft && x.UserId == user.Id);
                 if (cos != null)
                     ViewBag.NrProduse = _context.CosElemente.Where(x => x.CosId == cos.Id).Count();
                 else
@@ -55,13 +57,13 @@ namespace MagazinCore.Controllers
             }
             else
             {
-                cos = _context.Cos.FirstOrDefault(e => e.Status == "Draft" && e.UserId == user.Id);
+                cos = _context.Cos.FirstOrDefault(e => e.Status == OrderStatus.Draft && e.UserId == user.Id);
             }
 
             if (cos == null)
             {
                 cos = new Cos();
-                cos.Status = "Draft";
+                cos.Status = OrderStatus.Draft;
                 cos.UserId = user.Id;
                 cos.Creare = DateTime.Now;
 
@@ -108,7 +110,8 @@ namespace MagazinCore.Controllers
                 CookieOptions option = new CookieOptions();
                 option.Expires = DateTime.Now.AddDays(30);
 
-                Response.Cookies.Append("LoggedUser", user.Nume, option);
+                Response.Cookies.Append("LoggedUser", existingUser.Nume, option);
+                Response.Cookies.Append("UserRole", existingUser.Role.ToString(), option);
 
                 return RedirectToAction("Index", "Home");
             }
@@ -121,6 +124,7 @@ namespace MagazinCore.Controllers
         public IActionResult Logout(Utilizatori user)
         {
             Response.Cookies.Delete("LoggedUser");
+            Response.Cookies.Delete("UserRole");
 
             return RedirectToAction("Index", "Home");
         }
