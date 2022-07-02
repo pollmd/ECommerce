@@ -11,10 +11,5 @@ namespace MagazinCore.Models
         public int Id { get; set; }
         public DateTime Creare { get; set; }
         public OrderStatus Status { get; set; }
-
-        [ForeignKey("Utilizatori")]
-        public int UserId { get; set; }
-        public Utilizatori Utilizator { get; set; }
-
     }
 }

@@ -42,21 +42,33 @@
     <div id="USD"></div>
 </div>
 
-
 <div class="row">
-
-    @foreach (var item in Model)
-    {
-        <div class="card col-md-2">
-            <img src='@item.Imagine' alt="Avatar" style="width:100%">
-            <div class="container">
-                <h4><b>@item.Denumire</b></h4>
-                <div>@item.Descriere</div>
-                <p>
-                    Preț - @item.Cost lei <a href="/Home/Cumpara/@item.id" class="btn btn-warning">Cumpără</a>
-                </p>
-            </div>
+    <form action="/Home/Index" method="post" >
+        <div class="input-group rounded">
+            <input type="checkbox" id="promotion" name="promotion" value="Promotie" aria-label="Search" aria-describedby="search-addon" />
+            <input type="search" id="searchtext" name="searchtext" class="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
+            <button class="btn btn-info">
+                <i class="fas fa-search"></i>
+            </button>
         </div>
-    }
-
+    </form>
 </div>
+
+    <div class="row">
+        @foreach (var item in Model)
+        {
+            <div class="card col-md-2">
+                <img src='@item.Imagine' alt="Avatar" style="width:100%">
+                <div class="container">
+                    <h4><b>@item.Denumire</b></h4>
+                    <div>@item.Descriere</div>
+                    <p>
+                        Preț - @item.Cost lei <a href="/Home/Cumpara/@item.id" class="btn btn-warning">Cumpără</a>
+                    </p>
+                </div>
+            </div>
+        }
+
+    </div>
+
+    <script src="https://kit.fontawesome.com/0c858ed22c.js" crossorigin="anonymous"></script>

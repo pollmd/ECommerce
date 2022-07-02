@@ -13,8 +13,6 @@ namespace MagazinCore.Data
 
         public DbSet<Produs> Produs { get; set; }
 
-        public DbSet<Utilizatori> Utilizatori { get; set; }
-
         public DbSet<Cos> Cos { get; set; }
 
         public DbSet<CosElemente> CosElemente { get; set; }

@@ -1,13 +1,11 @@
-﻿using System;
+﻿using MagazinCore.Common.Enums;
+using MagazinCore.Data;
+using MagazinCore.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using MagazinCore.Data;
-using MagazinCore.Models;
-using MagazinCore.Common.Enums;
 
 namespace MagazinCore.Controllers
 {
@@ -23,8 +21,8 @@ namespace MagazinCore.Controllers
         // GET: CosElementes
         public async Task<IActionResult> Index()
         {
-            ViewBag.LoggedUser = Request.Cookies["LoggedUser"];
-            var user = _context.Utilizatori.FirstOrDefault(x => x.Nume == Request.Cookies["LoggedUser"]);
+
+            var user = new { Id = ""};
             var produse = _context.CosElemente.Where(x => x.CosId == -1);
 
             if (user == null)
@@ -33,7 +31,7 @@ namespace MagazinCore.Controllers
             }
             else
             {
-                var cos = _context.Cos.FirstOrDefault(x => x.Status == OrderStatus.Draft && x.UserId == user.Id);
+                var cos = _context.Cos.FirstOrDefault(x => x.Status == OrderStatus.Draft);
                 if (cos != null)
                 {
                     ViewBag.NrProduse = _context.CosElemente.Where(x => x.CosId == cos.Id).Count();
@@ -115,14 +113,13 @@ namespace MagazinCore.Controllers
         public async Task<IActionResult> AchitaAsync()
         {
 
-            var loggedUser = Request.Cookies["LoggedUser"];
-            var user = _context.Utilizatori.FirstOrDefault(x => x.Nume == loggedUser);
+            var user = new { Id = "" };
 
             if (user != null)
             {
                 ViewBag.NrProduse = 0;
 
-                var cos = _context.Cos.FirstOrDefault(x => x.Status == OrderStatus.Draft && x.UserId == user.Id);
+                var cos = _context.Cos.FirstOrDefault(x => x.Status == OrderStatus.Draft);
 
                 if (cos != null)
                 {

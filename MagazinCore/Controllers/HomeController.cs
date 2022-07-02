@@ -10,6 +10,7 @@ using MagazinCore.Data;
 using Microsoft.AspNetCore.Http;
 using System.Security.Cryptography;
 using MagazinCore.Common.Enums;
+using MagazinCore.Models.ViewModels;
 
 namespace MagazinCore.Controllers
 {
@@ -26,29 +27,21 @@ namespace MagazinCore.Controllers
 
         public IActionResult Index()
         {
-            ViewBag.LoggedUser = Request.Cookies["LoggedUser"];
-            ViewBag.UserRole = Request.Cookies["UserRole"];
-            var user = _context.Utilizatori.FirstOrDefault(x => x.Nume == Request.Cookies["LoggedUser"]);
 
-            if (user == null)
-            {
-                ViewBag.NrProduse = 0;
-            }
-            else 
-            {
-                var cos = _context.Cos.FirstOrDefault(x=>x.Status == OrderStatus.Draft && x.UserId == user.Id);
+            var user = new { Id = "" }; //todo: aspnetusers relation
+            var cos = _context.Cos.FirstOrDefault(x=>x.Status == OrderStatus.Draft);
                 if (cos != null)
                     ViewBag.NrProduse = _context.CosElemente.Where(x => x.CosId == cos.Id).Count();
                 else
                     ViewBag.NrProduse = 0;
-            }
+            
             
             return View(_context.Produs.ToList());
         }
 
         public async Task<IActionResult> CumparaAsync(int id)
         {
-            var user = _context.Utilizatori.FirstOrDefault(x => x.Nume == Request.Cookies["LoggedUser"]);
+            var user = new { Id = "" }; //todo: aspnetusers relation
             var cos = new Cos();
 
             if (user == null)
@@ -57,14 +50,13 @@ namespace MagazinCore.Controllers
             }
             else
             {
-                cos = _context.Cos.FirstOrDefault(e => e.Status == OrderStatus.Draft && e.UserId == user.Id);
+                cos = _context.Cos.FirstOrDefault(e => e.Status == OrderStatus.Draft);
             }
 
             if (cos == null)
             {
                 cos = new Cos();
                 cos.Status = OrderStatus.Draft;
-                cos.UserId = user.Id;
                 cos.Creare = DateTime.Now;
 
                 _context.Add(cos);
@@ -90,62 +82,16 @@ namespace MagazinCore.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
+        [HttpPost]
+        public async Task<IActionResult> Index(SearchParams searchparams)
+        {
+            var list = _context.Produs.Where(x => x.Descriere.ToLower().Contains(searchparams.SearchText.ToLower())).ToList();
+            return View(list);
+        }
+
         public IActionResult Login()
         {
             return View();
-        }
-
-        public IActionResult Autorizare(Utilizatori user)
-        {
-            var md5 = MD5.Create();
-            byte[] inputBytes = System.Text.Encoding.ASCII.GetBytes(user.Parola);
-            byte[] hashBytes = md5.ComputeHash(inputBytes);
-
-            user.Parola = Convert.ToBase64String(hashBytes);
-
-            var existingUser = _context.Utilizatori.FirstOrDefault(x=>x.Nume == user.Nume && x.Parola == user.Parola);
-
-            if (existingUser != null)
-            {
-                CookieOptions option = new CookieOptions();
-                option.Expires = DateTime.Now.AddDays(30);
-
-                Response.Cookies.Append("LoggedUser", existingUser.Nume, option);
-                Response.Cookies.Append("UserRole", existingUser.Role.ToString(), option);
-
-                return RedirectToAction("Index", "Home");
-            }
-
-            ViewBag.EroareDeConectare = "Utilizator sau Parolă greșită!";
-            return View("Login");
-            
-        }
-
-        public IActionResult Logout(Utilizatori user)
-        {
-            Response.Cookies.Delete("LoggedUser");
-            Response.Cookies.Delete("UserRole");
-
-            return RedirectToAction("Index", "Home");
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Utilizatori utilizator)
-        {
-            if (ModelState.IsValid)
-            {
-                var md5 = MD5.Create();
-                byte[] inputBytes = System.Text.Encoding.ASCII.GetBytes(utilizator.Parola);
-                byte[] hashBytes = md5.ComputeHash(inputBytes);
-
-                utilizator.Parola = Convert.ToBase64String(hashBytes);
-
-                _context.Add(utilizator);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(utilizator);
         }
     }
 }

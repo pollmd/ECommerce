@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using MagazinCore.Data;
 using MagazinCore.Models;
 using MagazinCore.Models.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MagazinCore.Controllers
 {
@@ -51,6 +52,8 @@ namespace MagazinCore.Controllers
         }
 
         // GET: Produs/Create
+
+        [Authorize]
         public IActionResult Create()
         {
             return View();
@@ -61,6 +64,7 @@ namespace MagazinCore.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> Create(Produs produs)
         {
             if (ModelState.IsValid)

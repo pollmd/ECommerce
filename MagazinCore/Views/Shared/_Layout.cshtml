@@ -17,31 +17,6 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
-                    @if (ViewBag.LoggedUser != null)
-                    {
-                        <a href="/Home/Logout/" style="color:#989898; margin-left:10px">
-                            Log out
-                        </a>
-                        <div class="dropdown" style="margin-left: 10px">
-                            <button class="btn btn-light btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                @ViewBag.LoggedUser
-                            </button>
-                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                @if (ViewBag.UserRole == "Admin")
-                                {
-                                    <a class="dropdown-item" href="/Produs">Produse</a>
-                                    <a class="dropdown-item" href="/Utilizatoris">Utilizatori</a>
-                                }
-                                <a class="dropdown-item" href="/Cos">Ordin de plată</a>
-                            </div>
-                        </div>
-                    }
-                    else
-                    {
-                        <a href="/Home/Login/" style="color:#989898; margin-left:10px">
-                            Log In
-                        </a>
-                    }
                     <partial name="_LoginPartial" />
                     <a href="/CosElementes/Index/">
                         <div class="navbar-nav">
