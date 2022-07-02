@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Security.Cryptography;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MagazinCore.Controllers
 {
@@ -18,6 +19,7 @@ namespace MagazinCore.Controllers
         }
 
         // GET: Utilizatoris
+        [Authorize]
         public async Task<IActionResult> Index()
         {
             return View(await _context.Utilizatori.ToListAsync());

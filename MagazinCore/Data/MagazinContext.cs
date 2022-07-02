@@ -1,26 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using MagazinCore.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using MagazinCore.Models;
 
 namespace MagazinCore.Data
 {
-    public class MagazinCoreContext : DbContext
+    public class MagazinCoreContext : IdentityDbContext
     {
         public MagazinCoreContext (DbContextOptions<MagazinCoreContext> options)
             : base(options)
         {
         }
 
-        public DbSet<MagazinCore.Models.Produs> Produs { get; set; }
+        public DbSet<Produs> Produs { get; set; }
 
-        public DbSet<MagazinCore.Models.Utilizatori> Utilizatori { get; set; }
+        public DbSet<Utilizatori> Utilizatori { get; set; }
 
-        public DbSet<MagazinCore.Models.Cos> Cos { get; set; }
+        public DbSet<Cos> Cos { get; set; }
 
-        public DbSet<MagazinCore.Models.CosElemente> CosElemente { get; set; }
+        public DbSet<CosElemente> CosElemente { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
            => optionsBuilder.UseNpgsql("Host=abul.db.elephantsql.com;Port=5432;Database=odkihpmm;Username=odkihpmm;Password=aQO6Uxbk6XXfxq46E9PfYBi-HWn_a6mP;");
