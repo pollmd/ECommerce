@@ -1,0 +1,42 @@
+﻿@model IEnumerable<Microsoft.AspNetCore.Identity.IdentityUser>
+
+    @{
+        ViewData["Title"] = "Tranzactii";
+    }
+
+    <h1>Tranzatia</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Id)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.UserName)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        <a href="/Index/@item.Id">@Html.DisplayFor(modelItem => item.Id)</a>
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.UserName)
+                    </td>
+                    <td>
+                        <form asp-action="AddUserRole">
+                            <input type="text" name="userId" id="userId" value="@item.Id">
+                            <input type="text" name="role" id="role" />
+                            <button class="badge-danger">+</button>
+                        </form>
+                    </td>
+
+                </tr>
+            }
+        </tbody>
+    </table>

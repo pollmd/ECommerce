@@ -53,7 +53,7 @@ namespace MagazinCore.Controllers
 
         // GET: Produs/Create
 
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
             return View();
