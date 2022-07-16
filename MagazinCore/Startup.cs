@@ -30,6 +30,13 @@ namespace MagazinCore
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<MagazinCoreContext>();
 
+            services.AddAuthentication().AddFacebook(op =>
+            {
+                op.AppId = Configuration["Authentication:Facebook:AppId"];
+                op.AppSecret = Configuration["Authentication:Facebook:AppSecret"];
+            }
+            );
+
             services.AddRazorPages();
         }
 
