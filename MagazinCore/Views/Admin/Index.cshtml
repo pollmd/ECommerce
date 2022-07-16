@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Microsoft.AspNetCore.Identity.IdentityUser>
+﻿@model IEnumerable<MagazinCore.Models.ViewModels.UserWithRoles>
 
     @{
         ViewData["Title"] = "Tranzactii";
@@ -23,20 +23,50 @@
             {
                 <tr>
                     <td>
-                        <a href="/Index/@item.Id">@Html.DisplayFor(modelItem => item.Id)</a>
+                        @Html.DisplayFor(modelItem => item.Id)
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.UserName)
                     </td>
                     <td>
-                        <form asp-action="AddUserRole">
-                            <input type="text" name="userId" id="userId" value="@item.Id">
-                            <input type="text" name="role" id="role" />
-                            <button class="badge-danger">+</button>
-                        </form>
+                        @foreach (var role in item.Roles)
+                        {
+                            <div  class="badge badge-info">
+                                @role
+                                <a onclick="deleteRole('@item.Id','@role')">x</a>
+                            </div>
+                        }
+                    </td>
+                    <td>
+                            @Html.DropDownList("Role"+item.Id, (IEnumerable<SelectListItem>)ViewBag.Roles, new { @class = "btn dropdown-toggle" })
+
+                            @*<button class="badge badge-danger">+</button>*@
+                            <a class="badge badge-danger" onclick="addRole('@item.Id')">+</a>
                     </td>
 
                 </tr>
             }
         </tbody>
     </table>
+<script>
+    function deleteRole(userId, role) {
+        var xhr = new XMLHttpRequest();
+
+        xhr.open("POST", "/Admin/DeleteUserRole");
+        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+        xhr.send("userId="+userId+"&role="+role);
+    }
+
+    function addRole(userId) {
+        var xhr = new XMLHttpRequest();
+
+        var e = document.getElementById("Role"+userId);
+        var role = e.options[e.selectedIndex].text;
+
+        xhr.open("POST", "/Admin/AddUserRole");
+        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+        xhr.send("userId=" + userId + "&role=" + role);
+    }
+</script>

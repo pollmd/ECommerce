@@ -85,7 +85,13 @@ namespace MagazinCore.Controllers
         [HttpPost]
         public async Task<IActionResult> Index(SearchParams searchparams)
         {
-            var list = _context.Produs.Where(x => x.Descriere.ToLower().Contains(searchparams.SearchText.ToLower())).ToList();
+            var list = _context.Produs.Where(x => x.Descriere.ToLower().Contains(searchparams.SearchText.ToLower()));
+
+            if (searchparams.Promotion)
+            {
+                list = list.Where(x => x.Reducere > 0 && x.EndReducere > DateTime.Now && x.StartReducere < DateTime.Now);
+            }
+
             return View(list);
         }
 
