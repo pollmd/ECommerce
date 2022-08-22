@@ -1,0 +1,79 @@
+﻿@page "/fetchdata"
+
+<PageTitle>Weather forecast</PageTitle>
+
+@using RedisDemo.Data
+@using RedisDemo.Extensions
+@inject WeatherForecastService ForecastService
+@inject Microsoft.Extensions.Caching.Distributed.IDistributedCache cache
+
+<h1>Weather forecast</h1>
+
+<p>This component demonstrates fetching data from a service.</p>
+<div>
+<button @onclick="LoadForecast">Load Forecast</button>
+</div>
+
+@if (forecasts is null && loadLocation == "")
+{
+    <div>Apasa butonul de load</div>
+}
+else if (forecasts is null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <div class="h3 @isCacheData">@loadLocation</div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Temp. (C)</th>
+                <th>Temp. (F)</th>
+                <th>Summary</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var forecast in forecasts)
+            {
+                <tr>
+                    <td>@forecast.Date.ToShortDateString()</td>
+                    <td>@forecast.TemperatureC</td>
+                    <td>@forecast.TemperatureF</td>
+                    <td>@forecast.Summary</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private WeatherForecast[]? forecasts;
+    public string isCacheData = "";
+    public string loadLocation = "";
+
+    private async Task LoadForecast()
+    {
+        string recordKey = $"weatherforecat1";
+        forecasts = await cache.GetRecordAsync<WeatherForecast[]>(recordKey);
+
+        if (forecasts is null)
+        {
+            isCacheData = "";
+            loadLocation = "Date citite din serviciu";
+            forecasts = await ForecastService.GetForecastAsync(DateTime.Now);
+            await cache.SetRecordAsync(recordKey, forecasts, null, null);
+        }
+        else
+        {
+            isCacheData = "text-danger";
+            loadLocation = "Date citite din cache";
+        }
+    }
+
+    //protected override async Task OnInitializedAsync()
+    //{
+    //    forecasts = await ForecastService.GetForecastAsync(DateTime.Now);
+    //}
+}
