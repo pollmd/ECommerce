@@ -11,5 +11,6 @@ namespace MagazinCore.Models
         public int Id { get; set; }
         public DateTime Creare { get; set; }
         public OrderStatus Status { get; set; }
+        public string UserName { get; set; }
     }
 }

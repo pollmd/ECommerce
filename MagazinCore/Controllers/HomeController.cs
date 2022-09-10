@@ -1,16 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using MagazinCore.Common.Enums;
+using MagazinCore.Data;
+using MagazinCore.Models;
+using MagazinCore.Models.ViewModels;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using System;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using MagazinCore.Models;
-using MagazinCore.Data;
-using Microsoft.AspNetCore.Http;
-using System.Security.Cryptography;
-using MagazinCore.Common.Enums;
-using MagazinCore.Models.ViewModels;
 
 namespace MagazinCore.Controllers
 {
@@ -28,8 +26,7 @@ namespace MagazinCore.Controllers
         public IActionResult Index()
         {
 
-            var user = new { Id = "" }; //todo: aspnetusers relation
-            var cos = _context.Cos.FirstOrDefault(x=>x.Status == OrderStatus.Draft);
+            var cos = _context.Cos.FirstOrDefault(x=>x.Status == OrderStatus.Draft && x.UserName == User.Identity.Name);
                 if (cos != null)
                     ViewBag.NrProduse = _context.CosElemente.Where(x => x.CosId == cos.Id).Count();
                 else
@@ -41,23 +38,23 @@ namespace MagazinCore.Controllers
 
         public async Task<IActionResult> CumparaAsync(int id)
         {
-            var user = new { Id = "" }; //todo: aspnetusers relation
             var cos = new Cos();
 
-            if (user == null)
+            if (!User.Claims.Any())
             {
-                return RedirectToAction("Login", "Home");
+                return LocalRedirect("/Identity/Account/Login");
             }
             else
             {
-                cos = _context.Cos.FirstOrDefault(e => e.Status == OrderStatus.Draft);
+                cos = _context.Cos.FirstOrDefault(e => e.Status == OrderStatus.Draft && e.UserName == User.Identity.Name);
             }
 
             if (cos == null)
             {
                 cos = new Cos();
                 cos.Status = OrderStatus.Draft;
-                cos.Creare = DateTime.Now;
+                cos.UserName = User.Identity.Name;
+                cos.Creare = new DateTime(); //Convert.ToDateTime(DateTime.Now.ToString("yyyy-MM-dd"));
 
                 _context.Add(cos);
                 await _context.SaveChangesAsync();

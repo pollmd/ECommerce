@@ -113,23 +113,24 @@ namespace MagazinCore.Controllers
         public async Task<IActionResult> AchitaAsync()
         {
 
-            var user = new { Id = "" };
-
-            if (user != null)
+            if (User.Claims.Any())
             {
                 ViewBag.NrProduse = 0;
 
-                var cos = _context.Cos.FirstOrDefault(x => x.Status == OrderStatus.Draft);
+                var cos = _context.Cos.FirstOrDefault(x => x.Status == OrderStatus.Draft && x.UserName == User.Identity.Name);
 
                 if (cos != null)
                 {
                     cos.Status = OrderStatus.Payed;
+                    cos.Creare = new System.DateTime();
                     _context.Cos.Update(cos);
 
                     var elemente = _context.CosElemente.Include(p=>p.Produs).Where(x => x.CosId == cos.Id);
                     foreach(var e in elemente)
                     {
                         e.Produs.Cantitate = e.Produs.Cantitate - 1;
+                        e.Produs.StartReducere = new System.DateTime();
+                        e.Produs.EndReducere = new System.DateTime();
                         _context.Produs.Update(e.Produs);
                     }
 
